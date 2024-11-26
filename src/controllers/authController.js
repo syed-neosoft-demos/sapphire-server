@@ -1,20 +1,29 @@
 import { response } from "../utils/appResponse.js";
 import { registrationMail } from "../utils/email.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
-import { signJWT, signRefreshJWT, verifyJWT } from "../utils/jwt.js";
+import { signJWT, verifyJWT } from "../utils/jwt.js";
 import { employeeRepo } from "../repositories/employee.js";
+import { ERROR_LOG } from "../utils/logger.js";
 
 export const signup = async (req, res) => {
   try {
-    let { email, password, name, empId } = req.body;
-    const isUser = await employeeRepo.getUser(email);
+    let { email, password, name, code, department_id, designation_id } =
+      req.body;
+    const isUser = await employeeRepo.getUserByEmailCode(email, code);
     if (isUser !== null) {
       return response.conflictResponse(res, "user already exist");
     }
     const hashPass = await hashPassword(password);
-    const payload = { email, name, password: hashPass, empId };
+    const payload = {
+      email,
+      name,
+      password: hashPass,
+      code,
+      department_id,
+      designation_id,
+    };
     const user = await employeeRepo.createUser(payload);
-    const token = await signJWT({ id: user?._id }, "30m");
+    const token = await signJWT({ id: user?.id }, "30m");
 
     registrationMail({
       email,
@@ -24,7 +33,7 @@ export const signup = async (req, res) => {
     return response.successResponse(
       res,
       "account successfully created, check your mail to activate your account",
-      {}
+      { success: true }
     );
   } catch (error) {
     return response.internalErrorResponse(res, error?.message);
@@ -36,11 +45,15 @@ export const verifyEmail = async (req, res) => {
     const { token } = req.query;
     const { id } = await verifyJWT(token);
     if (id) {
-      const user = await employeeRepo.updateUser(
-        { id: id },
-        { isActive: true }
-      );
-      console.log("user :>> ", user);
+      const payload = {
+        is_email_verified: true,
+      };
+      const condition = {
+        where: {
+          id: id,
+        },
+      };
+      const user = await employeeRepo.updateUser(payload, condition);
       if (user?.modifiedCount > 0) {
         res
           .status(200)
@@ -56,7 +69,7 @@ export const verifyEmail = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log("error :>> ", error?.message);
+    ERROR_LOG(error?.message);
     res
       .status(200)
       .send(
@@ -67,37 +80,32 @@ export const verifyEmail = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { empId, password } = req.body;
-    const user = await employeeRepo.getUser(empId);
+    const { code, password } = req.body;
+    const user = await employeeRepo.getUserByEmpId(code);
     if (user === null) {
       return response.validationErrorResponse(
         res,
         "Employee id or password is not valid"
       );
     }
-    if (!user?.isActive) {
+    if (!user?.is_email_verified) {
       return response.validationErrorResponse(
         res,
         "Your account is not activated"
       );
     }
-    if (user?.isBlock) {
-      return response.methodNotAllowed(
-        res,
-        "You are blocked, connect to admin"
-      );
-    }
     const isValid = await verifyPassword(password, user.password);
     if (isValid) {
-      const accessToken = signJWT(
-        { id: user?._id, role: user?.role, organization: user?.organization },
+      const accessToken = await signJWT(
+        {
+          id: user?.id,
+          role: user?.role ?? "USER",
+        },
         "2h"
       );
-      const refreshToken = signRefreshJWT({ id: user?._id }, "8d");
-      const token = await Promise.allSettled([accessToken, refreshToken]);
+
       return response.successResponse(res, "success", {
-        accessToken: token?.[0]?.value,
-        refreshToken: token?.[1]?.value,
+        accessToken: accessToken,
       });
     } else {
       return response.validationErrorResponse(
@@ -131,7 +139,7 @@ export const login = async (req, res) => {
 //       await forgetPassEmail({
 //         fullName: user.fullName,
 //         email,
-//         url: `${process.env.APP_BASE_URL}/auth/reset?token=${token}`,
+//         url: `${process.env.CLIENT_BASE_URL}/auth/reset?token=${token}`,
 //       });
 //       return response.successResponse(
 //         res,

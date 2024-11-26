@@ -14,18 +14,17 @@ export const signup = (data) => {
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
                 <td bgcolor="#002444" style="background-color: #002444; padding: 30px; text-align: center;">
-                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-family: Arial, sans-serif;">ESS</h1>
-                    <p style="color: #ffffff; margin: 10px 0 0; font-size: 18px; font-family: Arial, sans-serif;">Employee Self Service</p>
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-family: Arial, sans-serif;">ABC CAFE</h1>
                 </td>
             </tr>
 
             <tr>
                 <td style="padding: 40px 30px;">
                     <p style="font-size: 18px; color: #002444; text-align: center; margin-bottom: 20px;">
-                        Welcome to ESS, ${data?.fullName}!
+                        Welcome ${data?.fullName}!
                     </p>
 
-                    <p>Thank you for signing up. To complete your registration and access your ESS account, please verify your email address.</p>
+                    <p>Thank you for signing up. To complete your registration and access your account, please verify your email address.</p>
 
                     <table width="100%" cellpadding="25" cellspacing="0" border="0" bgcolor="#f8f9fa" style="margin: 20px 0; border: 1px solid #dee2e6;">
                         <tr>
@@ -53,7 +52,7 @@ export const signup = (data) => {
                                     </tr>
                                     <tr>
                                         <td width="20" valign="top">•</td>
-                                        <td>Once verified, you'll have full access to your ESS account</td>
+                                        <td>Once verified, you'll have full access to your account</td>
                                     </tr>
                                 </table>
                             </td>
@@ -74,15 +73,15 @@ export const signup = (data) => {
                     </table>
 
                     <p style="margin-top: 20px;">
-                        If you didn't create an account with ESS, please ignore this email or contact support if you have concerns.
+                        If you didn't create an account with us, please ignore this email or contact support if you have concerns.
                     </p>
                 </td>
             </tr>
 
             <tr>
                 <td bgcolor="#002444" style="background-color: #002444; color: #ffffff; text-align: center; padding: 20px; font-size: 12px;">
-                    <p style="margin: 0;">This is an automated message from ESS. Please do not reply to this email.</p>
-                    <p style="margin: 5px 0 0;">&copy; 2025 Employee Self Service. All rights reserved.</p>
+                    <p style="margin: 0;">This is an automated message from Developer. Please do not reply to this email.</p>
+                    <p style="margin: 5px 0 0;">&copy; 2025 Syed Hasnain Mehadi. All rights reserved.</p>
                 </td>
             </tr>
         </table>
@@ -211,7 +210,7 @@ export const accountCreated = (data) => {
 
                     <p>For security reasons, please change your password upon your first login.</p>
 
-                    <a href="${process.env.APP_BASE_URL}" style="background-color: #0056b3; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; display: inline-block; font-weight: bold;">Login to ESS</a>
+                    <a href="${process.env.CLIENT_BASE_URL}" style="background-color: #0056b3; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; display: inline-block; font-weight: bold;">Login to ESS</a>
 
                     <p>If you have any questions or need assistance, please contact your system administrator.</p>
                 </td>

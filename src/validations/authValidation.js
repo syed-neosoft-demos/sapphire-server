@@ -11,7 +11,7 @@ const signup = Joi.object({
 });
 
 const login = Joi.object({
-  code: Joi.string().label("code").required(),
+  code: Joi.number().label("code").required(),
   password: Joi.string().label("password").required(),
 });
 
