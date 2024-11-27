@@ -4,6 +4,7 @@ import { hashPassword, verifyPassword } from "../utils/password.js";
 import { signJWT, verifyJWT } from "../utils/jwt.js";
 import { employeeRepo } from "../repositories/employee.js";
 import { ERROR_LOG } from "../utils/logger.js";
+import { miscellaneousRepo } from "../repositories/miscellaneous.js";
 
 export const signup = async (req, res) => {
   try {
@@ -113,6 +114,29 @@ export const login = async (req, res) => {
         "Email id or password is not valid"
       );
     }
+  } catch (error) {
+    return response.internalErrorResponse(res, error?.message);
+  }
+};
+
+export const getDepartment = async (req, res) => {
+  try {
+    const department = await miscellaneousRepo.getDepartment();
+    return response.successResponse(res, "department list", {
+      success: true,
+      department,
+    });
+  } catch (error) {
+    return response.internalErrorResponse(res, error?.message);
+  }
+};
+export const getDesignation = async (req, res) => {
+  try {
+    const designation = await miscellaneousRepo.getDesignation();
+    return response.successResponse(res, "designation list", {
+      success: true,
+      designation,
+    });
   } catch (error) {
     return response.internalErrorResponse(res, error?.message);
   }

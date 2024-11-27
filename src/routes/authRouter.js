@@ -1,10 +1,18 @@
 import express from "express";
-import { login, signup, verifyEmail } from "../controllers/authController.js";
+import {
+  getDepartment,
+  getDesignation,
+  login,
+  signup,
+  verifyEmail,
+} from "../controllers/authController.js";
 import { authValidation } from "../validations/authValidation.js";
 import validate from "../middlewares/validator.js";
 
 const router = express.Router();
 
+router.get("/get-department", getDepartment);
+router.get("/get-designation", getDesignation);
 router.post("/signup", validate(authValidation.signup, "body"), signup);
 router.get(
   "/verify",

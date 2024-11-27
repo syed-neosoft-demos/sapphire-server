@@ -1,5 +1,4 @@
 import Joi from "joi";
-// import { roles } from "../utils/constant.js";
 
 const signup = Joi.object({
   email: Joi.string().label("email").trim().lowercase().required(),
