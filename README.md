@@ -21,4 +21,8 @@ CLIENT_BASE_URL=http://localhost:3001
 EMAIL_ID=web.hasnain@gmail.com
 EMAIL_PASS=
 
+CLOUDINARY_NAME=dots9i5n7
+CLOUDINARY_KEY=
+CLOUDINARY_SECRET=
+
 ```

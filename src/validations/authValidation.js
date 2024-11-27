@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const signup = Joi.object({
-  email: Joi.string().label("email").trim().lowercase().required(),
+  email: Joi.string().email().label("email").trim().lowercase().required(),
   password: Joi.string().label("password").required(),
   name: Joi.string().label("name").required(),
   code: Joi.number().label("code").required(),
