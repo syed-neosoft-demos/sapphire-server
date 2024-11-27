@@ -1,6 +1,7 @@
 import { claimRepo } from "../repositories/claim.js";
 import { response } from "../utils/appResponse.js";
 import { miscellaneousRepo } from "../repositories/miscellaneous.js";
+import cloudinary from "../config/cloudinaryConfig.js";
 
 export const getCategory = async (req, res) => {
   try {
@@ -35,6 +36,22 @@ export const getSubCategory = async (req, res) => {
     return response.successResponse(res, "category of expenses", {
       success: true,
       category,
+    });
+  } catch (error) {
+    console.log("error :>> ", error);
+    return response.internalErrorResponse(res, error?.message);
+  }
+};
+
+export const fileUpload = async (req, res) => {
+  try {
+    console.log("req.file.path :>> ", req.file.path);
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "bills", // Optional: Organize uploads into a folder
+    });
+    return response.successResponse(res, "category of expenses", {
+      success: true,
+      result: { url: result.secure_url, public_id: result.public_id },
     });
   } catch (error) {
     console.log("error :>> ", error);

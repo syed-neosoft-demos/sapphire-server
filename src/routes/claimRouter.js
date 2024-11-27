@@ -1,6 +1,7 @@
 import express from "express";
 import {
   claim,
+  fileUpload,
   getCategory,
   getLocation,
   getSubCategory,
@@ -8,6 +9,7 @@ import {
 import { claimValidation } from "../validations/claimValidation.js";
 import validate from "../middlewares/validator.js";
 import { handleAuth } from "../middlewares/handleAuth.js";
+import upload from "../config/multerConfig.js";
 
 const router = express.Router();
 
@@ -19,7 +21,7 @@ router.get(
   handleAuth,
   getSubCategory
 );
-
+router.post("/bill-upload", handleAuth, upload.single("file"), fileUpload);
 router.post("/create", validate(claimValidation.create, "body"), claim);
 
 export default router;
