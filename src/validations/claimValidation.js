@@ -7,6 +7,7 @@ const create = Joi.object({
   expense_location_id: Joi.number().label("expense_location_id").required(),
   bill_url: Joi.string().label("bill_url").required(),
   remark: Joi.string().label("remark").required(),
+  expense_sub_category_id: Joi.array().required(),
 });
 const paramId = Joi.object({
   id: Joi.number().label("id").required(),

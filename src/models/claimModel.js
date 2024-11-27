@@ -22,7 +22,6 @@ const Claim = sequelize.define(
     },
     claim_amount: {
       type: DataTypes.INTEGER,
-      unique: true,
       allowNull: false,
     },
     expense_date: {
