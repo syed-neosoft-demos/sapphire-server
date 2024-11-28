@@ -2,6 +2,7 @@ import { claimRepo } from "../repositories/claim.js";
 import { response } from "../utils/appResponse.js";
 import { miscellaneousRepo } from "../repositories/miscellaneous.js";
 import cloudinary from "../config/cloudinaryConfig.js";
+import { employeeRepo } from "../repositories/employee.js";
 
 export const getCategory = async (req, res) => {
   try {
@@ -61,6 +62,7 @@ export const fileUpload = async (req, res) => {
 
 export const claim = async (req, res) => {
   try {
+    const id = req.headers.userId;
     let {
       employee_id,
       claim_amount,
@@ -79,6 +81,13 @@ export const claim = async (req, res) => {
       bill_url,
       remark,
     };
+    const user = await employeeRepo.getUserByIdAssociation(id);
+    if (claim_amount > user?.designation?.max_claim) {
+      return response.validationErrorResponse(
+        res,
+        `Max claim amount is ${user?.designation?.max_claim} for the role  ${user?.designation?.name}`
+      );
+    }
     const claim = await claimRepo.createClaim(payload);
     const claimCategoryPayload = expense_sub_category_id.map((el) => ({
       claim_id: claim.id,
@@ -99,7 +108,11 @@ export const claim = async (req, res) => {
 export const getClaim = async (req, res) => {
   try {
     const id = req.headers.userId;
-    const claim = await miscellaneousRepo.getClaim(id, 2, 0);
+    let { pageNumber } = req.query;
+    pageNumber = pageNumber ?? 1;
+    const limit = pageNumber * 10;
+    const offset = (pageNumber - 1) * 10;
+    const claim = await miscellaneousRepo.getClaim(id, limit, offset);
     return response.successResponse(res, "category of expenses", {
       success: true,
       claim,

@@ -1,5 +1,6 @@
 import employeeModel from "../models/employeeModel.js";
 import { Op } from "sequelize";
+import { Designation, Employee } from "../models/index.js";
 
 const getUserById = async (id) => {
   const user = await employeeModel.findOne({
@@ -39,6 +40,20 @@ const updateUser = async (payload, condition) => {
   return user;
 };
 
+const getUserByIdAssociation = async (id) => {
+  const emp = await Employee.findOne({
+    where: { id: id },
+    include: [
+      {
+        model: Designation,
+        as: "designation",
+        attributes: ["id", "name", "max_claim"],
+      },
+    ],
+  });
+  return emp.toJSON();
+};
+
 export const employeeRepo = {
   getUserById,
   getUserByEmpId,
@@ -46,4 +61,5 @@ export const employeeRepo = {
   getUserByEmailCode,
   createUser,
   updateUser,
+  getUserByIdAssociation,
 };
