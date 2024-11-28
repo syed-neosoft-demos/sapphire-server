@@ -4,6 +4,7 @@ import ExpenseCategory from "../models/expenseCategoryModel.js";
 import ExpenseSubCategory from "../models/expenseSubCategoryModel.js";
 import Location from "../models/locationModel.js";
 import ClaimCategory from "../models/claimCategoryModel.js";
+import Claim from "../models/claimModel.js";
 
 const getCategory = async () => {
   const category = await ExpenseCategory.findAndCountAll(
@@ -49,6 +50,21 @@ const createClaimCategoryRelation = async (payload) => {
   const claimCategory = await ClaimCategory.bulkCreate(payload);
   return claimCategory;
 };
+const getClaim = async (id, limit = 10, skip = 0) => {
+  const claimCategory = await Claim.findAndCountAll(
+    { where: { employee_id: id } },
+    { limit: limit, offset: skip }
+  );
+  return claimCategory;
+};
+
+const getTotalClaim = async (id) => {
+  const totalClaim = await Claim.sum("claim_amount", {
+    where: { employee_id: id },
+  });
+  return totalClaim;
+};
+
 export const miscellaneousRepo = {
   getCategory,
   getLocation,
@@ -56,4 +72,6 @@ export const miscellaneousRepo = {
   getDesignation,
   getSubCategory,
   createClaimCategoryRelation,
+  getClaim,
+  getTotalClaim,
 };

@@ -13,7 +13,12 @@ const paramId = Joi.object({
   id: Joi.number().label("id").required(),
 });
 
+const pageNumber = Joi.object({
+  pageNumber: Joi.number().label("pageNumber").optional(),
+});
+
 export const claimValidation = {
   create,
   paramId,
+  pageNumber,
 };

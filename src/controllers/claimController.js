@@ -45,6 +45,7 @@ export const getSubCategory = async (req, res) => {
 
 export const fileUpload = async (req, res) => {
   try {
+    console.log("req.file.path :>> ", req.file.path);
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "bills", // Optional: Organize uploads into a folder
     });
@@ -79,7 +80,6 @@ export const claim = async (req, res) => {
       remark,
     };
     const claim = await claimRepo.createClaim(payload);
-
     const claimCategoryPayload = expense_sub_category_id.map((el) => ({
       claim_id: claim.id,
       expense_sub_category_id: el,
@@ -92,6 +92,33 @@ export const claim = async (req, res) => {
     });
   } catch (error) {
     console.log("error :>> ", error);
+    return response.internalErrorResponse(res, error?.message);
+  }
+};
+
+export const getClaim = async (req, res) => {
+  try {
+    const id = req.headers.userId;
+    const claim = await miscellaneousRepo.getClaim(id, 2, 0);
+    return response.successResponse(res, "category of expenses", {
+      success: true,
+      claim,
+    });
+  } catch (error) {
+    console.log("error :>> ", error);
+    return response.internalErrorResponse(res, error?.message);
+  }
+};
+
+export const getCountForDashboard = async (req, res) => {
+  try {
+    const id = req.headers.userId;
+    const totalClaim = await miscellaneousRepo.getTotalClaim(id);
+    return response.successResponse(res, "totalClaim fetch successful", {
+      success: true,
+      count: { totalClaim },
+    });
+  } catch (error) {
     return response.internalErrorResponse(res, error?.message);
   }
 };

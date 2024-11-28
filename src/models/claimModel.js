@@ -40,7 +40,7 @@ const Claim = sequelize.define(
     bill_url: {
       type: DataTypes.TEXT,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: "",
     },
     remark: {
       type: DataTypes.TEXT,
