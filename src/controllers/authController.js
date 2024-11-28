@@ -130,6 +130,7 @@ export const getDepartment = async (req, res) => {
     return response.internalErrorResponse(res, error?.message);
   }
 };
+
 export const getDesignation = async (req, res) => {
   try {
     const designation = await miscellaneousRepo.getDesignation();
@@ -141,64 +142,3 @@ export const getDesignation = async (req, res) => {
     return response.internalErrorResponse(res, error?.message);
   }
 };
-
-// export const forgetPassword = async (req, res) => {
-//   try {
-//     const { email } = req.body;
-//     const user = await empService.getAnUser({ email: { $eq: email } });
-//     if (user?.isBlock) {
-//       return response.methodNotAllowed(
-//         res,
-//         "You are blocked, connect to admin"
-//       );
-//     }
-//     if (!user?.isActive) {
-//       return response.validationErrorResponse(
-//         res,
-//         "Your account is not activated"
-//       );
-//     }
-//     if (user != null) {
-//       const token = await signJWT({ id: user._id }, "30m");
-//       await forgetPassEmail({
-//         fullName: user.fullName,
-//         email,
-//         url: `${process.env.CLIENT_BASE_URL}/auth/reset?token=${token}`,
-//       });
-//       return response.successResponse(
-//         res,
-//         "Email successfully sent, check your mail",
-//         {}
-//       );
-//     } else {
-//       return response.notFoundResponse(res, "Email not found");
-//     }
-//   } catch (error) {
-//     return response.internalErrorResponse(res, error?.message);
-//   }
-// };
-
-// export const resetPassword = async (req, res) => {
-//   try {
-//     const { password } = req.body;
-//     const { userId } = req.headers;
-//     if (userId) {
-//       const hashPass = await hashPassword(password);
-//       const isActive = await empService.updateUserByKey(
-//         { _id: userId },
-//         { password: hashPass }
-//       );
-//       if (isActive?.modifiedCount > 0) {
-//         return response.successResponse(
-//           res,
-//           "Password successfully updated",
-//           {}
-//         );
-//       }
-//     } else {
-//       return response.validationErrorResponse(res, "Invalid token");
-//     }
-//   } catch (error) {
-//     return response.internalErrorResponse(res, error?.message);
-//   }
-// };

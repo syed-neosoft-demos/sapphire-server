@@ -52,12 +52,7 @@ const createClaimCategoryRelation = async (payload) => {
   return claimCategory;
 };
 
-const getClaim = async (id, limit = 10, skip = 0) => {
-  // const claimCategory = await Claim.findAndCountAll(
-  //   { where: { employee_id: id } },
-  //   { limit: limit, offset: skip }
-  // );
-  // return claimCategory;
+const getClaim = async (id, limit, skip) => {
   const emp = await Claim.findAndCountAll({
     where: { employee_id: id },
     limit: limit,

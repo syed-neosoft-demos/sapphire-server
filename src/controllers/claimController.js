@@ -109,9 +109,10 @@ export const getClaim = async (req, res) => {
   try {
     const id = req.headers.userId;
     let { pageNumber } = req.query;
-    pageNumber = pageNumber ?? 1;
-    const limit = pageNumber * 10;
+    pageNumber = pageNumber <= 0 ? 1 : pageNumber;
+    const limit = 10;
     const offset = (pageNumber - 1) * 10;
+    console.log("id, limit, offset :>> ", id, limit, offset);
     const claim = await miscellaneousRepo.getClaim(id, limit, offset);
     return response.successResponse(res, "category of expenses", {
       success: true,

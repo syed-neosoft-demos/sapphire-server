@@ -8,7 +8,7 @@ sequelize
     console.log("Database connected successfully");
   })
   .catch((error) => {
-    console.log("error :>> ", error?.message);
+    console.log(error?.message);
   });
 
 //START SERVER
